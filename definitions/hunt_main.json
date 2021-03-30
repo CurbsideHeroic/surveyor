@@ -1,0 +1,93 @@
+{
+    "Suspicious child Powershell process with netcons": {
+        "process_name": ["winword.exe OR process_name:excel.exe OR process_name:powerpnt.exe AND netconn_count:[1 TO *] AND childproc_name:powershell.exe"],
+        "process_name": ["powershell.exe AND (parent_name:iexplore.exe OR parent_name:firefox.exe OR parent_name:chrome.exe)"],
+        "parent_name": ["powershell.exe AND process_name:wscript.exe"],
+        "parent_name": ["powershell.exe AND process_name:winword.exe"]
+    },
+
+    "Powershell spawning unknown processes": {
+	"process_name": ["powershel.exe AND -childproc_name:csc.exe"]
+    },
+
+    "Powershell spawning cmd or cmd spawning Powershell": {
+	"process_name": ["powershell.exe AND parent_name:cmd.exe"],
+	"process_name": ["cmd.exe AND parent_name:powershell.exe"]
+    },
+    
+    "Mimikatz related activity": {
+        "process_name": ["powershell.exe AND crossproc_name:lsass.exe"]
+    },
+
+    "Encoded Powershell commandline": {
+        "process_name": ["powershell.exe AND (cmdline:bypass OR cmdline:-encodedcommand OR cmdline:-enc)"]
+    },
+
+    "IIS worker processes spawning PowerShell ": {
+        "parent_name": ["w3wp.exe AND process_name:powershell.exe"]
+    },
+
+    "Changes to execution policy (so that “Bypass” not required)": {
+        "regmod": ["Microsoft.PowerShell\\ExecutionPolicy"]
+    },
+
+    "Usage - Sc.exe - Any except w32time": {
+        "process_name": ["sc.exe (-cmdline:\"C:\\Windows\\system32\\sc.exe start wuauserv\" OR -cmdline:\"C:\\Windows\\system32\\sc.exe start w32time task_started\")"]
+    },
+
+    "Svchost - Suspicious Parent Process": {
+        "childproc_name": ["svchost.exe -process_name:svchost.exe -process_name:services.exe"]
+    },
+    
+    "Usage - cmd.exe - Non-std path": {
+        "file_desc": ["\"windows command processor\" AND -path:windows\\system32\\cmd.exe AND -path:windows\\syswow64\\cmd.exe"]
+    },
+    
+    "Execution - Cmd.exe - unusual parent": {
+        "process_name": ["cmd.exe AND (parent_name:iexplore.exe OR parent_name:firefox.exe OR parent_name:chrome.exe OR parent_name:acrord32.exe OR parent_name:java.exe OR parent_name:javaw.exe)"]
+    },
+    
+    "Usage - net.exe other than Administrator": {
+        "process_name": ["net.exe -username:administrator"]
+    },
+    
+    "Svchost from unsigned parent": {
+        "digsig_result": ["Unsigned childproc_name:svchost.exe AND os_type:windows"]
+    },
+
+    "Usage - at.exe - Any": {
+        "process_name": ["at.exe"]
+    },
+
+    "Execution - Adobe launching unsigned binary": {
+        "parent_name": ["acrord32.exe AND os_type:windows AND -digsig_publisher:Adobe Systems Incorporated"]
+    },
+
+    "Usage - non-gui registry editor reg.exe - Any": {
+        "process_name": ["reg.exe"]
+    },
+
+    "Usage - Windows Credential Editor - Any": {
+        "modload": ["wceaux.dll"]
+    },
+
+    "Usage - regedit - Any": {
+        "-process_name": ["explorer.exe  AND (childproc_name:regedit.exe OR childproc_name:regedt32.exe)"]
+    },
+
+    "Shim Installer not from trustedinstaller.exe": {
+        "process_name": ["sdbinst.exe -parent_name:trustedinstaller.exe"]
+    },
+    
+    "Shim Installer not from trustedinstaller.exe": {
+        "process_name": ["sdbinst.exe -parent_name:trustedinstaller.exe"]
+    },
+
+    "Powershell using IEX": {
+	"process_name": ["powershell.exe AND cmdline:iex"]
+    },
+
+    "Windows Event Log manipulation": {
+	"process_name": ["wevtutil.exe"]
+    }
+}
